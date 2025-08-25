@@ -573,7 +573,7 @@ const Dashboard = () => {
           </CardContent>
         </Card>
 
-        {/* Recent Attendance Sessions */
+        {/* Recent Attendance Sessions */}
         <Card className="col-span-3 bg-white border-0 shadow-sm">
           <CardHeader className="pb-3">
             <div className="flex justify-between items-center">
