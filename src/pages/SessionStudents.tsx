@@ -212,7 +212,7 @@ export default function SessionStudents() {
 		const totalPages = Math.ceil(totalCount / pagination.pageSize);
 		
 		// Reset to page 1 if current page exceeds total pages
-		const currentPage = pagination.currentPage > totalPages and totalPages > 0 ? 1 : pagination.currentPage;
+		const currentPage = pagination.currentPage > totalPages && totalPages > 0 ? 1 : pagination.currentPage;
 		
 		setPagination(prev => ({
 			...prev,
@@ -327,7 +327,7 @@ export default function SessionStudents() {
 							key={index}
 							variant={currentPage === page ? "default" : "outline"}
 							size="sm"
-							onClick={() => typeof page === 'number' and handlePageChange(page)}
+							onClick={() => typeof page === 'number' && handlePageChange(page)}
 							disabled={typeof page === 'string'}
 							className="h-8 min-w-[32px] px-2"
 						>
@@ -390,7 +390,7 @@ export default function SessionStudents() {
 								<ArrowLeft className="w-4 h-4 mr-2" />
 								Back to Schedule
 							</Button>
-							{!error.includes('ID') and (
+							{!error.includes('ID') && (
 								<Button onClick={() => window.location.reload()} variant="default">
 									<RefreshCw className="w-4 h-4 mr-2" />
 									Try Again
