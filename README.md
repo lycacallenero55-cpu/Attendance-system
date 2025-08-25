@@ -4,12 +4,21 @@ A comprehensive attendance tracking system built with React, TypeScript, and Sup
 
 ## Features
 
-- **User Authentication**: Secure login with email/password using Supabase Auth
-- **Student Management**: Add, edit, and manage student records
-- **Session Management**: Create and manage class/event sessions
-- **Attendance Tracking**: Mark and track student attendance
-- **Digital Signatures**: Capture and store student signatures
-- **Reports & Analytics**: Generate attendance reports and statistics
+- **Modern Dashboard**: Redesigned with cards, live stats, trends, program comparison, and heatmap
+- **Navigation & UX**: Breadcrumbs, improved active states, mobile bottom nav, smoother transitions
+- **Forms**: Multi-step attendance session wizard, grouped fields, inline validation
+- **Attendance**:
+  - Create sessions (class/event/other)
+  - Bulk-select students per session page
+  - Templates (save/load session presets)
+  - Calendar integration (Google Calendar link + ICS download)
+- **Student Management**: Search with filters (program, year), grid/table views, pagination
+- **Reports**: PDF export for session summaries
+- **Data Visualization**: Attendance trends, program comparison, heatmap
+- **Internationalization (i18n)**: Built-in English/Spanish scaffolding
+- **Accessibility**: ARIA labels, focus management, keyboard-friendly navigation
+- **Performance**: Code-splitting, caching, skeletons, animations
+- **Monitoring**: Basic error logging hooks
 
 ## Tech Stack
 
@@ -85,6 +94,14 @@ npm run dev
 
 Your application should now be running at `http://localhost:5173`
 
+Optional dev API server (mock endpoints):
+
+```bash
+npm run api:dev
+```
+
+Runs at `http://localhost:5174` (CORS enabled). Example: `GET /api/health`.
+
 ## Testing
 
 To run the Supabase integration tests:
@@ -129,6 +146,9 @@ attendance-monitoring-system/
 │   │   ├── contexts/       # React contexts
 │   │   ├── hooks/          # Custom React hooks
 │   │   ├── lib/            # Utility functions and services
+│   │   │   ├── templates.ts       # Attendance templates (local storage)
+│   │   │   ├── calendar.ts        # Google URL + ICS builder
+│   │   │   └── api-dev-server.ts  # Lightweight Express dev API
 │   │   ├── pages/          # Page components
 │   │   ├── types/          # TypeScript type definitions
 │   │   └── App.tsx         # Main application component
@@ -138,6 +158,25 @@ attendance-monitoring-system/
 │   └── scripts/            # Utility scripts
 └── ...
 ```
+
+## Usage Highlights
+
+- Attendance Session Wizard:
+  1) Fill details (title, type, program/year/section)
+  2) Schedule (date, times)
+  3) Review and submit
+  - Save your configuration as a template; load it later from the dropdown
+  - Add to calendar via Google link and download ICS
+
+- Students page:
+  - Search by name/ID, filter by program/year, toggle grid/table views
+  - Pagination controls with page size selector
+
+- Session Students:
+  - Bulk-select/unselect current page; apply actions
+
+- Reports:
+  - Export single-session summaries to PDF
 
 ## Security
 

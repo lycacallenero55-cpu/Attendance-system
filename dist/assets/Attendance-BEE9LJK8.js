@@ -1,0 +1,1 @@
+import{j as t}from"./index-Dm7atRpY.js";import{L as r}from"./Layout-B3tkA0W2.js";import{A as o}from"./AttendanceForm-tgxqyfHX.js";import"./index-BlhDO3pI.js";import"./input-C-A1T-iP.js";import"./select-D5rxK3kY.js";import"./index-o3oZkxKP.js";const x=()=>t.jsx(r,{children:t.jsx(o,{})});export{x as default};

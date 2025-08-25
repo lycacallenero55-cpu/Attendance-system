@@ -12,7 +12,8 @@
     "generate:template": "tsx scripts/generateTemplate.ts",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "api:dev": "tsx src/lib/api-dev-server.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -67,6 +68,7 @@
     "date-fns": "^3.6.0",
     "embla-carousel-react": "^8.3.0",
     "framer-motion": "^12.23.12",
+    "i18next": "^24.0.2",
     "fs-extra": "^11.2.0",
     "input-otp": "^1.2.4",
     "lucide-react": "^0.462.0",
@@ -74,6 +76,7 @@
     "papaparse": "^5.5.3",
     "qrcode": "^1.5.4",
     "react": "^18.3.1",
+    "react-i18next": "^15.0.1",
     "react-day-picker": "^8.10.1",
     "react-dom": "^18.3.1",
     "react-dropzone": "^14.3.8",
@@ -82,6 +85,9 @@
     "react-router-dom": "^6.26.2",
     "react-window": "^1.8.11",
     "recharts": "^2.15.4",
+    "jspdf": "^2.5.2",
+    "express": "^4.19.2",
+    "cors": "^2.8.5",
     "rollup": "^4.46.2",
     "sonner": "^1.5.0",
     "tailwind-merge": "^2.5.2",
