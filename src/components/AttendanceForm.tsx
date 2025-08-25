@@ -9,6 +9,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { CalendarIcon, Clock, Users, BookOpen, Calendar, Star, Loader2, ChevronRight } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { fetchStudents } from "@/lib/supabaseService";
+import { getTemplates, saveTemplate, findTemplate } from "@/lib/templates";
+import { buildGoogleCalendarUrl, buildICS, downloadICS } from "@/lib/calendar";
 
 export type AttendanceType = "class" | "event" | "other";
 
@@ -44,6 +46,8 @@ const AttendanceForm = ({ onSuccess, onSubmit, initialData }: AttendanceFormProp
 		timeIn: initialData?.timeIn || "",
 		timeOut: initialData?.timeOut || "",
 	});
+	const [templateName, setTemplateName] = useState<string>("");
+	const [templatesVersion, setTemplatesVersion] = useState<number>(0);
 	
 	// State for dropdown options
 	const [loadingOptions, setLoadingOptions] = useState(false);
@@ -114,11 +118,66 @@ const AttendanceForm = ({ onSuccess, onSubmit, initialData }: AttendanceFormProp
 		}
 	};
 
-	// ... existing code ...
+	const applyTemplate = (name: string) => {
+		const t = findTemplate(name);
+		if (!t) return;
+		const data = t.data as Partial<typeof formData & { attendanceType: AttendanceType }>;
+		setFormData(prev => ({
+			...prev,
+			title: (data.title as string) || prev.title,
+			program: (data.program as string) || prev.program,
+			year: (data.year as string) || prev.year,
+			section: (data.section as string) || prev.section,
+			date: (data.date as string) || prev.date,
+			timeIn: (data.timeIn as string) || prev.timeIn,
+			timeOut: (data.timeOut as string) || prev.timeOut,
+		}));
+		if (data.attendanceType) setAttendanceType(data.attendanceType);
+		toast.success(`Applied template: ${name}`);
+	};
+
+	const handleSaveTemplate = () => {
+		const name = templateName || prompt("Template name?") || "";
+		if (!name.trim()) return;
+		saveTemplate(name.trim(), { ...formData, attendanceType });
+		setTemplatesVersion(v => v + 1);
+		toast.success("Template saved");
+	};
+
+	const handleCalendarActions = () => {
+		if (!formData.title || !formData.date || !formData.timeIn) {
+			toast.warning("Please set title, date and start time");
+			return;
+		}
+		const start = new Date(`${formData.date}T${formData.timeIn}:00Z`);
+		const end = formData.timeOut ? new Date(`${formData.date}T${formData.timeOut}:00Z`) : new Date(start.getTime() + 60*60*1000);
+		const url = buildGoogleCalendarUrl({ title: formData.title, start, end, description: initialData?.description, location: initialData?.venue });
+		window.open(url, '_blank');
+		const ics = buildICS({ title: formData.title, start, end, description: initialData?.description, location: initialData?.venue });
+		downloadICS(formData.title.replace(/\s+/g, '_'), ics);
+	};
 
 	return (
 		<div className="w-full max-w-none mx-auto px-6 py-4">
-			{/* ... existing code ... */}
+			{/* Templates & Calendar actions row */}
+			<div className="flex flex-col md:flex-row gap-2 md:gap-3 mb-2">
+				<div className="flex items-center gap-2">
+					<Select value="" onValueChange={(v) => applyTemplate(v)}>
+						<SelectTrigger className="w-[200px]"><SelectValue placeholder="Load template" /></SelectTrigger>
+						<SelectContent>
+							{getTemplates().map(t => (
+								<SelectItem key={t.name + templatesVersion} value={t.name}>{t.name}</SelectItem>
+							))}
+						</SelectContent>
+					</Select>
+					<Input placeholder="Template name" value={templateName} onChange={(e) => setTemplateName(e.target.value)} className="w-[180px]" />
+					<Button variant="outline" onClick={handleSaveTemplate}>Save Template</Button>
+				</div>
+				<div className="flex items-center gap-2">
+					<Button variant="outline" onClick={handleCalendarActions}>Add to Calendar (Google/ICS)</Button>
+				</div>
+			</div>
+
 			<div className="pb-8">
 				<form onSubmit={handleSubmit} className="space-y-5" aria-live="polite">
 					{/* ... existing code ... */}
