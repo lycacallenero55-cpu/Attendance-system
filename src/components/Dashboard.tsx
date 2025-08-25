@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { CalendarDays, Users, BookOpen, TrendingUp, CheckCircle2, BarChart3, Clock, Activity, Target, AlertCircle, Calendar } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState, useRef, useCallback, useMemo } from "react";
+import { useEffect, useState, useRef, useCallback, useMemo, Fragment } from "react";
 import { supabase } from "@/lib/supabase";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
@@ -724,7 +724,7 @@ const Dashboard = () => {
                 { day: 'Thu', vals: [91, 89, 90, 92, 87] },
                 { day: 'Fri', vals: [88, 86, 87, 89, 90] },
               ].map(({ day, vals }) => (
-                <React.Fragment key={day}>
+                <Fragment key={day}>
                   <div className="text-[11px] text-gray-500">{day}</div>
                   {vals.map((v, i) => {
                     const intensity = Math.round(((v - 80) / 20) * 100); // 80-100 -> 0-100
@@ -741,7 +741,7 @@ const Dashboard = () => {
                       </div>
                     );
                   })}
-                </React.Fragment>
+                </Fragment>
               ))}
             </div>
           </CardContent>
