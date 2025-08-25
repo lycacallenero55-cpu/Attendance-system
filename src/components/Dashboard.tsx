@@ -573,7 +573,7 @@ const Dashboard = () => {
           </CardContent>
         </Card>
 
-        {/* Recent Attendance Sessions */}
+        {/* Recent Attendance Sessions */
         <Card className="col-span-3 bg-white border-0 shadow-sm">
           <CardHeader className="pb-3">
             <div className="flex justify-between items-center">
@@ -648,6 +648,101 @@ const Dashboard = () => {
                   <p className="text-xs text-gray-400 mt-1">Attendance sessions will appear here</p>
                 </div>
               )}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Program Comparison and Attendance Heatmap */}
+      <div className="grid gap-4 md:grid-cols-2">
+        {/* Program Comparison */}
+        <Card className="bg-white border-0 shadow-sm">
+          <CardHeader className="pb-3">
+            <div className="flex justify-between items-center">
+              <div>
+                <CardTitle className="text-lg font-semibold text-gray-900">Program Comparison</CardTitle>
+                <CardDescription className="text-gray-600">Attendance rate by program</CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="h-[260px] pl-2">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart
+                data={[
+                  { name: 'CS', present: 94, absent: 6 },
+                  { name: 'Math', present: 91, absent: 9 },
+                  { name: 'Eng', present: 88, absent: 12 },
+                  { name: 'Sci', present: 92, absent: 8 },
+                ]}
+                margin={{ top: 5, right: 10, left: 10, bottom: 0 }}
+                barGap={4}
+              >
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
+                <XAxis dataKey="name" tick={{ fill: '#6b7280' }} axisLine={false} tickLine={false} />
+                <YAxis
+                  tick={{ fill: '#6b7280' }}
+                  tickFormatter={(v) => `${v}%`}
+                  domain={[0, 100]}
+                  axisLine={false}
+                  tickLine={false}
+                  width={36}
+                />
+                <Tooltip
+                  contentStyle={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #e5e7eb' }}
+                  formatter={(value, name) => [`${value}%`, name === 'present' ? 'Present' : 'Absent']}
+                />
+                <Legend verticalAlign="top" height={28} formatter={(v) => <span className="text-xs text-muted-foreground">{v}</span>} />
+                <Bar dataKey="present" name="Present" fill="#10b981" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="absent" name="Absent" fill="#ef4444" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+
+        {/* Attendance Heatmap */}
+        <Card className="bg-white border-0 shadow-sm">
+          <CardHeader className="pb-3">
+            <div className="flex justify-between items-center">
+              <div>
+                <CardTitle className="text-lg font-semibold text-gray-900">Attendance Heatmap</CardTitle>
+                <CardDescription className="text-gray-600">By day and time</CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {/* Simple heatmap grid: days x time blocks */}
+            <div className="grid grid-cols-6 gap-2">
+              {/* Column headers */}
+              <div></div>
+              {["8am", "10am", "12pm", "2pm", "4pm"].map((t) => (
+                <div key={t} className="text-[11px] text-gray-500 text-center">{t}</div>
+              ))}
+              {[
+                { day: 'Mon', vals: [92, 88, 90, 94, 86] },
+                { day: 'Tue', vals: [89, 90, 91, 87, 85] },
+                { day: 'Wed', vals: [95, 93, 92, 90, 88] },
+                { day: 'Thu', vals: [91, 89, 90, 92, 87] },
+                { day: 'Fri', vals: [88, 86, 87, 89, 90] },
+              ].map(({ day, vals }) => (
+                <React.Fragment key={day}>
+                  <div className="text-[11px] text-gray-500">{day}</div>
+                  {vals.map((v, i) => {
+                    const intensity = Math.round(((v - 80) / 20) * 100); // 80-100 -> 0-100
+                    const bg = `hsl(160 84% ${Math.max(30, Math.min(60, 30 + intensity * 0.3))}% / 0.9)`; // greenish
+                    return (
+                      <div
+                        key={i}
+                        className="h-8 rounded-sm border border-gray-100 flex items-center justify-center text-[10px] text-gray-700"
+                        style={{ backgroundColor: bg }}
+                        title={`${v}%`}
+                        aria-label={`Attendance ${v}%`}
+                      >
+                        {v}%
+                      </div>
+                    );
+                  })}
+                </React.Fragment>
+              ))}
             </div>
           </CardContent>
         </Card>

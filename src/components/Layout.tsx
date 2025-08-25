@@ -1,4 +1,6 @@
 import Navigation from "@/components/ui/navigation";
+import Breadcrumbs from "@/components/ui/breadcrumbs";
+import MobileNavigation from "@/components/ui/MobileNavigation";
 import { useMediaQuery } from "../hooks/use-media-query";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useState, useEffect } from "react";
@@ -27,6 +29,9 @@ const Layout = ({ children }: LayoutProps) => {
 
   return (
     <div className="min-h-screen bg-background">
+      <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 bg-primary text-primary-foreground px-3 py-1 rounded">
+        Skip to content
+      </a>
       {/* Navigation Component (handles both desktop and mobile) */}
       <Navigation />
       
@@ -40,6 +45,9 @@ const Layout = ({ children }: LayoutProps) => {
           : 'ml-0 w-full px-4', // Add padding for mobile
         "py-3 md:py-4"
       )}>
+        <div className="px-1 md:px-0">
+          <Breadcrumbs />
+        </div>
         {isLoading ? (
           <div className="space-y-4">
             <div className="flex items-center justify-between">
@@ -57,9 +65,13 @@ const Layout = ({ children }: LayoutProps) => {
             </div>
           </div>
         ) : (
-          <>{children}</>
+          <div id="main" role="main" aria-live="polite">
+            {children}
+          </div>
         )}
       </main>
+      {/* Mobile bottom navigation */}
+      <MobileNavigation />
     </div>
   );
 };

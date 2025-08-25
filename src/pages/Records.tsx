@@ -15,6 +15,7 @@ import {
   BookOpen,
   Star
 } from "lucide-react";
+import jsPDF from "jspdf";
 
 const Records = () => {
   const mockRecords = [
@@ -98,6 +99,23 @@ const Records = () => {
     if (rate >= 90) return "text-accent";
     if (rate >= 80) return "text-primary";
     return "text-destructive";
+  };
+
+  const exportRecordPdf = (record: typeof mockRecords[number]) => {
+    const doc = new jsPDF();
+    doc.setFontSize(16);
+    doc.text("Attendance Report", 14, 20);
+    doc.setFontSize(12);
+    doc.text(`Title: ${record.title}`, 14, 30);
+    doc.text(`Type: ${record.type}`, 14, 38);
+    doc.text(`Program: ${record.program}`, 14, 46);
+    doc.text(`Date: ${record.date}`, 14, 54);
+    doc.text(`Time: ${record.timeIn} - ${record.timeOut}`, 14, 62);
+    doc.text(`Total: ${record.totalStudents}`, 14, 70);
+    doc.text(`Present: ${record.present}`, 14, 78);
+    doc.text(`Absent: ${record.absent}`, 14, 86);
+    doc.text(`Attendance Rate: ${record.attendanceRate}%`, 14, 94);
+    doc.save(`attendance_${record.id}.pdf`);
   };
 
   return (
@@ -220,7 +238,7 @@ const Records = () => {
                       <Button variant="outline" size="sm" className="h-8 w-8 p-0">
                         <Eye className="w-3.5 h-3.5" />
                       </Button>
-                      <Button variant="outline" size="sm" className="h-8 w-8 p-0">
+                      <Button variant="outline" size="sm" className="h-8 w-8 p-0" onClick={() => exportRecordPdf(record)}>
                         <Download className="w-3.5 h-3.5" />
                       </Button>
                     </div>

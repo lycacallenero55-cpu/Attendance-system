@@ -1,27 +1,29 @@
+import { Suspense, lazy, useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import Index from "./pages/Index";
-import Attendance from "./pages/Attendance";
-import Records from "./pages/Records";
-import Students from "./pages/Students";
-import Schedule from "./pages/Schedule";
-import SessionStudents from "./pages/SessionStudents";
-import TakeAttendance from "./pages/TakeAttendance";
-import TakeAttendanceSession from "./pages/TakeAttendanceSession";
-import Accounts from "./pages/Accounts";
-import NotFound from "./pages/NotFound";
-import Login from "./pages/Login";
-import ExcuseApplication from "./pages/ExcuseApplication";
-import AcademicYear from "./pages/AcademicYear";
-import Profile from "./pages/Profile";
+const Index = lazy(() => import("./pages/Index"));
+const Attendance = lazy(() => import("./pages/Attendance"));
+const Records = lazy(() => import("./pages/Records"));
+const Students = lazy(() => import("./pages/Students"));
+const Schedule = lazy(() => import("./pages/Schedule"));
+const SessionStudents = lazy(() => import("./pages/SessionStudents"));
+const TakeAttendance = lazy(() => import("./pages/TakeAttendance"));
+const TakeAttendanceSession = lazy(() => import("./pages/TakeAttendanceSession"));
+const Accounts = lazy(() => import("./pages/Accounts"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const Login = lazy(() => import("./pages/Login"));
+const ExcuseApplication = lazy(() => import("./pages/ExcuseApplication"));
+const AcademicYear = lazy(() => import("./pages/AcademicYear"));
+const Profile = lazy(() => import("./pages/Profile"));
 import { AuthProvider } from "./contexts/AuthContext";
 import { SidebarProvider } from "./contexts/SidebarContext";
 import { useAuth } from "./hooks/useAuth";
 import { usePageTitle } from "./hooks/usePageTitle";
 import { RoleProtectedRoute } from "./components/RoleProtectedRoute";
+import { initMonitoring } from "./lib/monitoring";
 
 const queryClient = new QueryClient();
 
@@ -164,7 +166,9 @@ const App = () => (
           <Toaster />
           <Sonner />
           <BrowserRouter>
-            <AppRoutes />
+            <Suspense fallback={<div className="p-6 text-sm text-muted-foreground">Loading...</div>}>
+              <AppRoutes />
+            </Suspense>
           </BrowserRouter>
         </TooltipProvider>
       </SidebarProvider>
